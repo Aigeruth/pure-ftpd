@@ -1,0 +1,8 @@
+CREATE TABLE users (
+  User VARCHAR(16) BINARY NOT NULL,
+  Password VARCHAR(64) BINARY NOT NULL,
+  Uid INT(11) NOT NULL default '-1',
+  Gid INT(11) NOT NULL default '-1',
+  Dir VARCHAR(128) BINARY NOT NULL,
+  PRIMARY KEY  (User)
+);

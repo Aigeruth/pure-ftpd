@@ -1,0 +1,50 @@
+#############################################
+#                                           #
+# Sample Pure-FTPd LDAP configuration file. #
+# See README.LDAP for explanations.         #
+#                                           #
+#############################################
+
+# Optional : name of the LDAP server. Default : localhost
+LDAPServer <%= node['pure-ftpd']['ldap']['host']%>
+
+# Optional : server port. Default : 389
+LDAPPort   <%= node['pure-ftpd']['ldap']['port']%>
+
+# Mandatory : the base DN to search accounts from. No default.
+LDAPBaseDN <%= node['pure-ftpd']['ldap']['base_dn']%>
+
+# Optional : who we should bind the server as.
+#            Default : binds anonymously or binds as FTP users
+LDAPBindDN <%= node['pure-ftpd']['ldap']['bind_dn']%>
+
+# Password if we don't bind anonymously
+# This configuration file should be only readable by root
+LDAPBindPW <%= node['pure-ftpd']['ldap']['password']%>
+
+# Optional : default UID, when there's no entry in a user object
+<%= "LDAPDefaultUID #{node['pure-ftpd']['ldap']['default_uid']}" if node['pure-ftpd']['ldap']['default_uid'] %>
+
+# Optional : default GID, when there's no entry in a user object
+<%= "LDAPDefaultGID #{node['pure-ftpd']['ldap']['default_gid']}" if node['pure-ftpd']['ldap']['default_gid'] %>
+
+# Filter to use to find the object that contains user info
+# \L is replaced by the login the user is trying to log in as
+# The default filter is (&(objectClass=posixAccount)(uid=\L))
+<%= "LDAPFilter #{node['pure-ftpd']['ldap']['filter']}" if node['pure-ftpd']['ldap']['filter'] %>
+
+# Attribute to get the home directory
+# Default is homeDirectory (the standard attribute from posixAccount)
+<%= "LDAPHomeDir #{node['pure-ftpd']['ldap']['home']}" if node['pure-ftpd']['ldap']['home'] %>
+
+# LDAP protocol version to use
+# Version 3 (default) is mandatory with recent releases of OpenLDAP.
+<%= "LDAPVersion #{node['pure-ftpd']['ldap']['version']}" if node['pure-ftpd']['ldap']['version'] %>
+
+# Optional: use TLS to connect to the LDAP server
+<%= "LDAPUseTLS #{node['pure-ftpd']['ldap']['tls']}" if node['pure-ftpd']['ldap']['tls'] %>
+
+# Can be PASSWORD or BIND.
+# PASSWORD retrieves objects and checks against the userPassword attribute
+# BIND tries to bind
+<%= "LDAPAuthMethod #{node['pure-ftpd']['ldap']['auth_method']}" if node['pure-ftpd']['ldap']['auth_method'] %>
