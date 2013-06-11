@@ -7,28 +7,28 @@
 
 
 # Optional : MySQL server name or IP. Don't define this for unix sockets.
-MYSQLServer     <%= node['pure-ftpd']['mysql']['host']%>
+MYSQLServer     <%= node['pure-ftpd']['mysql']['host'] %>
 
 # Optional : MySQL port. Don't define this if a local unix socket is used.
-MYSQLPort       <%= node['pure-ftpd']['mysql']['port']%>
+MYSQLPort       <%= node['pure-ftpd']['mysql']['port'] %>
 
 # Optional : define the location of mysql.sock if the server runs on this host.
 # MYSQLSocket     /tmp/mysql.sock
 
 # Mandatory : user to bind the server as.
-MYSQLUser       <%= node['pure-ftpd']['mysql']['user']%>
+MYSQLUser       <%= node['pure-ftpd']['mysql']['user'] %>
 
 # Mandatory : user password. You must have a password.
-MYSQLPassword   <%= node['pure-ftpd']['mysql']['password']%>
+MYSQLPassword   <%= node['pure-ftpd']['mysql']['password'] %>
 
 # Mandatory : database to open.
-MYSQLDatabase   <%= node['pure-ftpd']['mysql']['database']%>
+MYSQLDatabase   <%= node['pure-ftpd']['mysql']['database'] %>
 
 # Mandatory : how passwords are stored
 # Valid values are : "cleartext", "crypt", "md5" and "password"
 # ("password" = MySQL password() function)
 # You can also use "any" to try "crypt", "md5" *and* "password"
-MYSQLCrypt      <%= node['pure-ftpd']['mysql']['password_encryption']%>
+MYSQLCrypt      <%= node['pure-ftpd']['mysql']['password_encryption'] %>
 
 
 # In the following directives, parts of the strings are replaced at
@@ -45,42 +45,42 @@ MYSQLCrypt      <%= node['pure-ftpd']['mysql']['password_encryption']%>
 
 
 # Query to execute in order to fetch the password
-MYSQLGetPW      <%= "#{node['pure-ftpd']['mysql']['queries']['get_pw']}"%>
+MYSQLGetPW      <%= node['pure-ftpd']['mysql']['queries']['get_pw'] %>
 
 # Query to execute in order to fetch the system user name or uid
-<%= "MYSQLGetUID #{node['pure-ftpd']['mysql']['queries']['get_uid']}" unless node['pure-ftpd']['mysql']['default_uid'] %>
+<%= "MYSQLGetUID " + node['pure-ftpd']['mysql']['queries']['get_uid'] unless node['pure-ftpd']['mysql']['default_uid'] %>
 
 # Optional : default UID - if set this overrides MYSQLGetUID
-<%= "MYSQLDefaultUID #{node['pure-ftpd']['mysql']['default_uid']}" if node['pure-ftpd']['mysql']['default_uid'] %>
+<%= "MYSQLDefaultUID " + node['pure-ftpd']['mysql']['default_uid'] if node['pure-ftpd']['mysql']['default_uid'] %>
 
 # Query to execute in order to fetch the system user group or gid
-<%= "MYSQLGetGID #{node['pure-ftpd']['mysql']['queries']['get_gid']}" unless node['pure-ftpd']['mysql']['default_gid'] %>
+<%= "MYSQLGetGID " + node['pure-ftpd']['mysql']['queries']['get_gid'] unless node['pure-ftpd']['mysql']['default_gid'] %>
 
 # Optional : default GID - if set this overrides MYSQLGetGID
-<%= "MYSQLDefaultGID #{node['pure-ftpd']['mysql']['default_gid']}" if node['pure-ftpd']['mysql']['default_gid'] %>
+<%= "MYSQLDefaultGID " + node['pure-ftpd']['mysql']['default_gid'] if node['pure-ftpd']['mysql']['default_gid'] %>
 
 # Query to execute in order to fetch the home directory
-<%= "MYSQLGetDir     #{"#{node['pure-ftpd']['mysql']['queries']['get_dir']}"}" if "#{node['pure-ftpd']['mysql']['queries']['get_dir']}" %>
+<%= "MYSQLGetDir     " + node['pure-ftpd']['mysql']['queries']['get_dir'] if node['pure-ftpd']['mysql']['queries']['get_dir'] %>
 
 # Optional : query to get the maximal number of files 
 # Pure-FTPd must have been compiled with virtual quotas support.
-<%= "MYSQLGetQTAFS  #{node['pure-ftpd']['mysql']['queries']['get_quota_files']}" if node['pure-ftpd']['mysql']['queries']['get_quota_files'] %>
+<%= "MYSQLGetQTAFS  " + node['pure-ftpd']['mysql']['queries']['get_quota_files'] if node['pure-ftpd']['mysql']['queries']['get_quota_files'] %>
 
 # Optional : query to get the maximal disk usage (virtual quotas)
 # The number should be in Megabytes.
 # Pure-FTPd must have been compiled with virtual quotas support.
-<%= "MYSQLGetQTASZ  #{node['pure-ftpd']['mysql']['queries']['get_quota_size']}" if node['pure-ftpd']['mysql']['queries']['get_quota_size'] %>
+<%= "MYSQLGetQTASZ  " + node['pure-ftpd']['mysql']['queries']['get_quota_size'] if node['pure-ftpd']['mysql']['queries']['get_quota_size'] %>
 
 # Optional : ratios. The server has to be compiled with ratio support.
-<%= "MYSQLGetRatioUL #{node['pure-ftpd']['mysql']['queries']['get_ul_ratio']}" if node['pure-ftpd']['mysql']['queries']['get_ul_ratio'] %>
-<%= "MYSQLGetRatioDL #{node['pure-ftpd']['mysql']['queries']['get_dl_ratio']}" if node['pure-ftpd']['mysql']['queries']['get_dl_ratio'] %>
+<%= "MYSQLGetRatioUL " + node['pure-ftpd']['mysql']['queries']['get_ul_ratio'] if node['pure-ftpd']['mysql']['queries']['get_ul_ratio'] %>
+<%= "MYSQLGetRatioDL " + node['pure-ftpd']['mysql']['queries']['get_dl_ratio'] if node['pure-ftpd']['mysql']['queries']['get_dl_ratio'] %>
 
 
 # Optional : bandwidth throttling.
 # The server has to be compiled with throttling support.
 # Values are in KB/s .
-<%= "MYSQLGetBandwidthUL #{node['pure-ftpd']['mysql']['queries']['get_ul_bandwidth']}" if node['pure-ftpd']['mysql']['queries']['get_ul_bandwidth'] %>
-<%= "MYSQLGetBandwidthDL #{"#{node['pure-ftpd']['mysql']['queries']['get_dl_bandwidth']}"}" if node['pure-ftpd']['mysql']['queries']['get_dl_bandwidth'] %>
+<%= "MYSQLGetBandwidthUL " + node['pure-ftpd']['mysql']['queries']['get_ul_bandwidth'] if node['pure-ftpd']['mysql']['queries']['get_ul_bandwidth'] %>
+<%= "MYSQLGetBandwidthDL " + node['pure-ftpd']['mysql']['queries']['get_dl_bandwidth'] if node['pure-ftpd']['mysql']['queries']['get_dl_bandwidth'] %>
 
 # Enable ~ expansion. NEVER ENABLE THIS BLINDLY UNLESS :
 # 1) You know what you are doing.

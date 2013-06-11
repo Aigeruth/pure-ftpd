@@ -41,10 +41,10 @@ end
 
 package ftp_service
 
-group "#{node['pure-ftpd']['group']}"
-user "#{node['pure-ftpd']['user']}" do
-  gid   "#{node['pure-ftpd']['group']}"
-  home  "#{node['pure-ftpd']['home']}"
+group node['pure-ftpd']['group']}
+user node['pure-ftpd']['user'] do
+  gid   node['pure-ftpd']['group']
+  home  node['pure-ftpd']['home']
   shell "/bin/false"
 end
 
@@ -63,17 +63,20 @@ when "debian", "ubuntu"
   # Creates symlinks in auth/ to enable authentication type. Removes if it is disabled.
   # Creates symlink only for the selected backend.
   node['pure-ftpd']['auth'].keys.each do |auth|
-    unless ["pam", "unix"].include? auth
-      # Creates parameter file with the right content.
-      file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}" do
-        content "#{node['pure-ftpd']['#{auth}.conf']}"
-        action :delete if "#{node['pure-ftpd']['auth'][auth]['enabled']}" == "no"
-      end
+    # Creates parameter file with the right content.
+    file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}" do
+      content node['pure-ftpd']["#{auth}.conf"]
+      action :create
+      only_if { node['pure-ftpd']['auth'][auth]['enabled'] == "yes" and not ["pam", "unix"].include?(auth) }
+    end
+    file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}" do
+      action :delete
+      only_if { node['pure-ftpd']['auth'][auth]['enabled'] == "no" and not ["pam", "unix"].include?(auth) }
     end
     # Filename pattern: piority + auth_name -> (config) filename
     link "#{node['pure-ftpd']['auth_config_dir']}/#{node['pure-ftpd']['auth'][auth]['priority']}#{node['pure-ftpd']['auth'][auth]['auth_name']}" do
       to "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}"
-      action :delete if "#{node['pure-ftpd']['auth'][auth]['enabled']}" == "no"
+      action :delete if node['pure-ftpd']['auth'][auth]['enabled'] == "no"
     end if auth == node['pure-ftpd']['backend']
   end
 
@@ -94,7 +97,7 @@ end
     node.default['pure-ftpd'][backend]['queries'][query] = nil
   end
   # Config file contains sensitive information, only root should have (read) access.
-  template "#{node['pure-ftpd']["#{backend}.conf"]}" do
+  template node['pure-ftpd']["#{backend}.conf"] do
     source "#{backend}.conf.erb"
     user "root"
     group "root"
@@ -104,8 +107,8 @@ end
 
 # Creates virtual users' homes.
 directory node['pure-ftpd']['virtual_users_root'] do
-  owner  "#{node['pure-ftpd']['user']}"
-  group  "#{node['pure-ftpd']['group']}"
+  owner  node['pure-ftpd']['user']
+  group  node['pure-ftpd']['group']
   mode   "0775"
   action :create
 end if node['pure-ftpd']['virtual_users_root']

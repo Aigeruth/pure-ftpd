@@ -7,21 +7,21 @@
 
 
 # If PostgreSQL listens to a TCP socket
-PGSQLServer     <%= node['pure-ftpd']['postgresql']['host']%>
-PGSQLPort       <%= node['pure-ftpd']['postgresql']['port']%>
+PGSQLServer     <%= node['pure-ftpd']['postgresql']['host'] %>
+PGSQLPort       <%= node['pure-ftpd']['postgresql']['port'] %>
 
 # *or* if PostgreSQL can only be reached through a local Unix socket
 # PGSQLServer     /tmp
 # PGSQLPort       .s.PGSQL.5432
 
 # Mandatory : user to bind the server as.
-PGSQLUser       <%= node['pure-ftpd']['postgresql']['user']%>
+PGSQLUser       <%= node['pure-ftpd']['postgresql']['user'] %>
 
 # Mandatory : user password. You *must* have a password.
-PGSQLPassword   <%= node['pure-ftpd']['postgresql']['password']%>
+PGSQLPassword   <%= node['pure-ftpd']['postgresql']['password'] %>
 
 # Mandatory : database to open.
-PGSQLDatabase   <%= node['pure-ftpd']['postgresql']['database']%>
+PGSQLDatabase   <%= node['pure-ftpd']['postgresql']['database'] %>
 
 # Mandatory : how passwords are stored
 # Valid values are : "cleartext", "crypt", "md5" and "any"
@@ -40,38 +40,38 @@ PGSQLCrypt      <%= node['pure-ftpd']['postgresql']['password_encryption'] %>
 # especially for virtual hosting.
 
 # Query to execute in order to fetch the password
-PGSQLGetPW      <%= "#{node['pure-ftpd']['postgresql']['queries']['get_pw']}"%>
+PGSQLGetPW      <%= node['pure-ftpd']['postgresql']['queries']['get_pw'] %>
 
 # Query to execute in order to fetch the system user name or uid
-<%= "PGSQLGetUID #{node['pure-ftpd']['postgresql']['queries']['get_uid']}" unless node['pure-ftpd']['postgresql']['default_uid'] %>
+<%= "PGSQLGetUID " + node['pure-ftpd']['postgresql']['queries']['get_uid'] unless node['pure-ftpd']['postgresql']['default_uid'] %>
 
 # Optional : default UID - if set this overrides PGSQLGetUID
-<%= "PGSQLDefaultUID #{node['pure-ftpd']['postgresql']['default_uid']}" if node['pure-ftpd']['postgresql']['default_uid'] %>
+<%= "PGSQLDefaultUID " + node['pure-ftpd']['postgresql']['default_uid'] if node['pure-ftpd']['postgresql']['default_uid'] %>
 
 # Query to execute in order to fetch the system user group or gid
-<%= "PGSQLGetGID #{node['pure-ftpd']['postgresql']['queries']['get_gid']}" unless node['pure-ftpd']['postgresql']['default_gid'] %>
+<%= "PGSQLGetGID " + node['pure-ftpd']['postgresql']['queries']['get_gid'] unless node['pure-ftpd']['postgresql']['default_gid'] %>
 
 # Optional : default GID - if set this overrides PGSQLGetGID
-<%= "PGSQLDefaultGID #{node['pure-ftpd']['postgresql']['default_gid']}" if node['pure-ftpd']['postgresql']['default_gid'] %>
+<%= "PGSQLDefaultGID " + node['pure-ftpd']['postgresql']['default_gid'] if node['pure-ftpd']['postgresql']['default_gid'] %>
 
 # Query to execute in order to fetch the home directory
-<%= "PGSQLGetDir     #{"#{node['pure-ftpd']['postgresql']['queries']['get_dir']}"}" %>
+<%= "PGSQLGetDir     " + node['pure-ftpd']['postgresql']['queries']['get_dir'] %>
 
 # Optional : query to get the maximal number of files 
 # Pure-FTPd must have been compiled with virtual quotas support.
-<%= "PGSQLGetQTAFS  #{node['pure-ftpd']['postgresql']['queries']['get_quota_files']}" if node['pure-ftpd']['postgresql']['queries']['get_quota_files'] %>
+<%= "PGSQLGetQTAFS  " + node['pure-ftpd']['postgresql']['queries']['get_quota_files'] if node['pure-ftpd']['postgresql']['queries']['get_quota_files'] %>
 
 # Optional : query to get the maximal disk usage (virtual quotas)
 # The number should be in Megabytes.
 # Pure-FTPd must have been compiled with virtual quotas support.
-<%= "PGSQLGetQTASZ  #{node['pure-ftpd']['postgresql']['queries']['get_quota_size']}" if node['pure-ftpd']['postgresql']['queries']['get_quota_size'] %>
+<%= "PGSQLGetQTASZ  " + node['pure-ftpd']['postgresql']['queries']['get_quota_size'] if node['pure-ftpd']['postgresql']['queries']['get_quota_size'] %>
 
 # Optional : ratios. The server has to be compiled with ratio support.
-<%= "PGSQLGetRatioUL #{node['pure-ftpd']['postgresql']['queries']['get_ul_ratio']}" if node['pure-ftpd']['postgresql']['queries']['get_ul_ratio'] %>
-<%= "PGSQLGetRatioDL #{node['pure-ftpd']['postgresql']['queries']['get_dl_ratio']}" if node['pure-ftpd']['postgresql']['queries']['get_dl_ratio'] %>
+<%= "PGSQLGetRatioUL " + node['pure-ftpd']['postgresql']['queries']['get_ul_ratio'] if node['pure-ftpd']['postgresql']['queries']['get_ul_ratio'] %>
+<%= "PGSQLGetRatioDL " + node['pure-ftpd']['postgresql']['queries']['get_dl_ratio'] if node['pure-ftpd']['postgresql']['queries']['get_dl_ratio'] %>
 
 # Optional : bandwidth throttling.
 # The server has to be compiled with throttling support.
 # Values are in KB/s .
-<%= "PGSQLGetBandwidthUL #{node['pure-ftpd']['postgresql']['queries']['get_ul_bandwidth']}" if node['pure-ftpd']['postgresql']['queries']['get_ul_bandwidth'] %>
-<%= "PGSQLGetBandwidthDL #{"#{node['pure-ftpd']['postgresql']['queries']['get_dl_bandwidth']}"}" if node['pure-ftpd']['postgresql']['queries']['get_dl_bandwidth'] %>
+<%= "PGSQLGetBandwidthUL " + node['pure-ftpd']['postgresql']['queries']['get_ul_bandwidth'] if node['pure-ftpd']['postgresql']['queries']['get_ul_bandwidth'] %>
+<%= "PGSQLGetBandwidthDL " + node['pure-ftpd']['postgresql']['queries']['get_dl_bandwidth'] if node['pure-ftpd']['postgresql']['queries']['get_dl_bandwidth'] %>
