@@ -41,7 +41,7 @@ end
 
 package ftp_service
 
-group node['pure-ftpd']['group']}
+group node['pure-ftpd']['group']
 user node['pure-ftpd']['user'] do
   gid   node['pure-ftpd']['group']
   home  node['pure-ftpd']['home']
