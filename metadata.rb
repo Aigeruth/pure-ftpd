@@ -15,7 +15,7 @@ end
   supports os, ">= 5.0"
 end
 
-depends "apt"
+depends "apt", "< 2.0.0"
 depends "yum"
 
 depends "mysql"
