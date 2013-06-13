@@ -1,0 +1,3 @@
+cookbook "pure-ftpd" do
+
+end
