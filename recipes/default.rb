@@ -32,7 +32,9 @@ node.default['pure-ftpd']['auth'][node['pure-ftpd']['backend']]['enabled'] = "ye
 case node['platform']
 when "debian", "ubuntu"
   # Names of packages are pure-ftpd, pure-ftpd-backend-ldap, pure-ftpd-backend-mysql, pure-ftpd-backend-postgresql.
-  ftp_service += node['pure-ftpd']['backend'] ? "-#{node['pure-ftpd']['backend']}" : ""
+  unless ["pam", "unix"].include? node['pure-ftpd']['backend']
+    ftp_service += node['pure-ftpd']['backend'] ? "-#{node['pure-ftpd']['backend']}" : ""
+  end
 when "redhat", "centos", "scientific", "fedora", "amazon", "oracle"
   # Names of packages are pure-ftpd and pure-ftpd-selinux.
   # Pure-FTPd is available from EPEL repository only.
