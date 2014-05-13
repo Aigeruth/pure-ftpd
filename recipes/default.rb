@@ -94,16 +94,8 @@ end
 
 # Configuration files for backends are platform independent.
 ["mysql", "postgresql"].each do |backend|
-  puts node['pure-ftpd']['backend']+ ' ' + backend
-  puts !!(node['pure-ftpd']['backend'].eql? backend)
   if node['pure-ftpd']['backend'].eql? backend
     # Blanks disabled queries.
-    puts backend
-    puts node['pure-ftpd']
-    puts node['pure-ftpd'][backend]
-    puts node['pure-ftpd'][backend]['disabled_queries']
-
-
     node['pure-ftpd'][backend]['disabled_queries'].each do |query|
       node.default['pure-ftpd'][backend]['queries'][query] = nil
     end
