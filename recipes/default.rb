@@ -94,17 +94,19 @@ end
 
 # Configuration files for backends are platform independent.
 ["mysql", "postgresql"].each do |backend|
-  # Blanks disabled queries.
-  node['pure-ftpd'][backend]['disabled_queries'].each do |query|
-    node.default['pure-ftpd'][backend]['queries'][query] = nil
+  if node['pure-ftpd']['backend'].eql? backend
+    # Blanks disabled queries.
+    node['pure-ftpd'][backend]['disabled_queries'].each do |query|
+      node.default['pure-ftpd'][backend]['queries'][query] = nil
+    end
+    # Config file contains sensitive information, only root should have (read) access.
+    template node['pure-ftpd']["#{backend}.conf"] do
+      source "#{backend}.conf.erb"
+      user "root"
+      group "root"
+      mode "0600"
+    end
   end
-  # Config file contains sensitive information, only root should have (read) access.
-  template node['pure-ftpd']["#{backend}.conf"] do
-    source "#{backend}.conf.erb"
-    user "root"
-    group "root"
-    mode "0600"
-  end if node['pure-ftpd']['backend'].eql? backend
 end
 
 # Creates virtual users' homes.
