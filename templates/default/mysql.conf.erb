@@ -48,13 +48,13 @@ MYSQLCrypt      <%= node['pure-ftpd']['mysql']['password_encryption'] %>
 MYSQLGetPW      <%= node['pure-ftpd']['mysql']['queries']['get_pw'] %>
 
 # Query to execute in order to fetch the system user name or uid
-<%= "MYSQLGetUID " + node['pure-ftpd']['mysql']['queries']['get_uid'] unless node['pure-ftpd']['mysql']['default_uid'] %>
+<%= "MYSQLGetUID " + node['pure-ftpd']['mysql']['queries']['get_uid'] if node['pure-ftpd']['mysql']['get_uid'] %>
 
 # Optional : default UID - if set this overrides MYSQLGetUID
 <%= "MYSQLDefaultUID " + node['pure-ftpd']['mysql']['default_uid'] if node['pure-ftpd']['mysql']['default_uid'] %>
 
 # Query to execute in order to fetch the system user group or gid
-<%= "MYSQLGetGID " + node['pure-ftpd']['mysql']['queries']['get_gid'] unless node['pure-ftpd']['mysql']['default_gid'] %>
+<%= "MYSQLGetGID " + node['pure-ftpd']['mysql']['queries']['get_gid'] if node['pure-ftpd']['mysql']['get_gid'] %>
 
 # Optional : default GID - if set this overrides MYSQLGetGID
 <%= "MYSQLDefaultGID " + node['pure-ftpd']['mysql']['default_gid'] if node['pure-ftpd']['mysql']['default_gid'] %>
@@ -62,7 +62,7 @@ MYSQLGetPW      <%= node['pure-ftpd']['mysql']['queries']['get_pw'] %>
 # Query to execute in order to fetch the home directory
 <%= "MYSQLGetDir     " + node['pure-ftpd']['mysql']['queries']['get_dir'] if node['pure-ftpd']['mysql']['queries']['get_dir'] %>
 
-# Optional : query to get the maximal number of files 
+# Optional : query to get the maximal number of files
 # Pure-FTPd must have been compiled with virtual quotas support.
 <%= "MYSQLGetQTAFS  " + node['pure-ftpd']['mysql']['queries']['get_quota_files'] if node['pure-ftpd']['mysql']['queries']['get_quota_files'] %>
 

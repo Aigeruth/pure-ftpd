@@ -1,65 +1,55 @@
-Description
-===========
+# Pure-FTPd cookbook
 
-Installs and configures Pure-FTPd server.
+## Description
 
-Requirements
-============
+Chef cookbook for installing and configuring Pure-FTPd server.
 
-Platform
---------
+## Requirements
+
+### Platforms
 
 * Debian, Ubuntu
 * CentOS, Red Hat, Fedora, Scientific
 
-Tested on:
-
-* Debian 6.0
-* CentOS 5.9
-
-Cookbooks
----------
+### Cookbooks
 
 * apt
 * yum
-* mysql
-* postgresql
 
-Attributes
-==========
+## Attributes
 
 See the `attributes/default.rb` for default values. Several attributes have values that vary based on the node's platform and version.
 
-## Platform independent
+### Platform independent
 
-* `node["pure-ftpd"]["config_dir"]` - location of configuration files (e.g. `/etc/pure-ftpd`).
-* `node["pure-ftpd"]["user"]` - the user that Pure-FTPd will run as.
-* `node["pure-ftpd"]["group"]` - the group that Pure-FTP will run as.
-* `node["pure-ftpd"]["home"]` - home of the user.
-* `node["pure-ftpd"]["virtuals_users_root"]` - location of virtual users' home directories.
-* `node["pure-ftpd"]["load_default_schema"]` - loads default schema into the chosen backend.
+* `node['pure-ftpd']['config_dir']` - location of configuration files (e.g. `/etc/pure-ftpd`).
+* `node['pure-ftpd']['user']` - the user that Pure-FTPd will run as.
+* `node['pure-ftpd']['group']` - the group that Pure-FTP will run as.
+* `node['pure-ftpd']['home']` - home of the user.
+* `node['pure-ftpd']['virtuals_users_root']` - location of virtual users' home directories.
+* `node['pure-ftpd']['load_default_schema']` - loads default schema into the chosen backend.
 
-## Platform dependent
+### Platform dependent
 
-* `node["pure-ftpd"]["ldap.conf"]` - location of the configuration file for the LDAP backend.
-* `node["pure-ftpd"]["mysql.conf"]` - location of the configuration file for the MySQL backend.
-* `node["pure-ftpd"]["postgresql.conf"]` - location of the configuration file for the PostgreSQL backend.
-* `node["pure-ftpd"]["puredb.conf"]` - location of the PureDB file.
+* `node['pure-ftpd']['ldap.conf']` - location of the configuration file for the LDAP backend.
+* `node['pure-ftpd']['mysql.conf']` - location of the configuration file for the MySQL backend.
+* `node['pure-ftpd']['postgresql.conf']` - location of the configuration file for the PostgreSQL backend.
+* `node['pure-ftpd']['puredb.conf']` - location of the PureDB file.
 
-## Debian/Ubuntu specific
+### Debian/Ubuntu specific
 
 Debian and Ubuntu split the configuration file into multiple files named after the option keys and keep them in folders (auth, db, conf).
 
-* `node["pure-ftpd"]["auth_config_dir"]` - location of the authentication configuration files.
-* `node["pure-ftpd"]["db_config_dir"]` - location of the backends configurations files.
-* `node["pure-ftpd"]["conf_config_dir"]` - location of Pure-FTPd parameters.
+* `node['pure-ftpd']['auth_config_dir']` - location of the authentication configuration files.
+* `node['pure-ftpd']['db_config_dir']` - location of the backends configurations files.
+* `node['pure-ftpd']['conf_config_dir']` - location of Pure-FTPd parameters.
 
-## Windows Specific
+### Windows Specific
 
 Windows isn't supported yet. Pure-FTPd requires Cygwin on Windows. See in the [documentation](http://download.pureftpd.org/pure-ftpd/doc/README.Windows).
 
 
-## Authentication
+### Authentication
 
 If you choose MySQL or PostgreSQL as the backend you have to set the parameters for the database connection. A sample PostgreSQL configuration:
 
@@ -111,7 +101,7 @@ If you want to use the same uid/gid for all users, you can set it with `default_
 
 You should set the password encryption method, default is `cleartext`, available methods are: `cleartext`, `crypt`, `md5` and `any`.
 
-## Pure-FTPd options
+### Pure-FTPd options
 
 Pure-FTPd has a lot of "yes/no" options. You can enable/disable them by adding the option key to the `enabled` or `disabled` array respectively.
 
@@ -137,8 +127,7 @@ Other options that require a value can be set directly in the `options` array.
       }
     }
 
-Usage
-=====
+## Usage
 
 To install Pure-FTPd use:
 
@@ -154,12 +143,32 @@ To set backend:
 
 You have to select a valid backend. Available backends are: `ldap`, `mysql`, `postgresql`, `pam` and `unix`.
 
-License and Author
-==================
+## Testing
 
-- Author:: Gabor Nagy (<mail@aigeruth.hu>)
+Run [RuboCop](https://github.com/bbatsov/rubocop) or [Foodcritic](http://www.foodcritic.io/):
 
-Copyright:: 2013 Gabor Nagy
+```bash
+$ bundle exec foodcritic .
+$ bundle exec rubocop
+```
+
+Run [ChefSpec](http://sethvargo.github.io/chefspec/):
+
+```bash
+$ bundle exec rspec
+```
+
+Run integration tests with [KitchenCI](http://kitchen.ci/) and [Serverspec](http://serverspec.org/):
+
+```bash
+$ bundle exec kitchen test
+```
+
+## License and Author
+
+Author:: Gabor Nagy ([@Aigeruth](https://github.com/Aigeruth/))
+
+Copyright:: 2013-2014 Gabor Nagy
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

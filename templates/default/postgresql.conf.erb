@@ -43,13 +43,13 @@ PGSQLCrypt      <%= node['pure-ftpd']['postgresql']['password_encryption'] %>
 PGSQLGetPW      <%= node['pure-ftpd']['postgresql']['queries']['get_pw'] %>
 
 # Query to execute in order to fetch the system user name or uid
-<%= "PGSQLGetUID " + node['pure-ftpd']['postgresql']['queries']['get_uid'] unless node['pure-ftpd']['postgresql']['default_uid'] %>
+<%= "PGSQLGetUID " + node['pure-ftpd']['postgresql']['queries']['get_uid'] if node['pure-ftpd']['postgresql']['get_uid'] %>
 
 # Optional : default UID - if set this overrides PGSQLGetUID
 <%= "PGSQLDefaultUID " + node['pure-ftpd']['postgresql']['default_uid'] if node['pure-ftpd']['postgresql']['default_uid'] %>
 
 # Query to execute in order to fetch the system user group or gid
-<%= "PGSQLGetGID " + node['pure-ftpd']['postgresql']['queries']['get_gid'] unless node['pure-ftpd']['postgresql']['default_gid'] %>
+<%= "PGSQLGetGID " + node['pure-ftpd']['postgresql']['queries']['get_gid'] if node['pure-ftpd']['postgresql']['get_gid'] %>
 
 # Optional : default GID - if set this overrides PGSQLGetGID
 <%= "PGSQLDefaultGID " + node['pure-ftpd']['postgresql']['default_gid'] if node['pure-ftpd']['postgresql']['default_gid'] %>
