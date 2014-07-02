@@ -17,106 +17,83 @@
 # limitations under the License.
 #
 
-ftp_service = 'pure-ftpd' 
-
 # Validates type of backend.
-# TODO: support multiple backends in the same time and ExtAuth
-backends = ["ldap", "mysql", "postgresql", "pam", "unix"]
+fail "Backend should be one of [#{backends.join(', ')}]." unless backends.include? selected_backend
 
-raise "Backend should be one of [#{backends.join(', ')}]." unless backends.include? node['pure-ftpd']['backend']
-
-# If backend is supported, then that authentication type should be enabled.
-node.default['pure-ftpd']['auth'][node['pure-ftpd']['backend']]['enabled'] = "yes"
-
-
-case node['platform']
-when "debian", "ubuntu"
-  # Names of packages are pure-ftpd, pure-ftpd-backend-ldap, pure-ftpd-backend-mysql, pure-ftpd-backend-postgresql.
-  unless ["pam", "unix"].include? node['pure-ftpd']['backend']
-    ftp_service += node['pure-ftpd']['backend'] ? "-#{node['pure-ftpd']['backend']}" : ""
-  end
-when "redhat", "centos", "scientific", "fedora", "amazon", "oracle"
+case node['platform_family']
+when 'rhel', 'fedora'
   # Names of packages are pure-ftpd and pure-ftpd-selinux.
   # Pure-FTPd is available from EPEL repository only.
-  include_recipe "yum::epel"
+  include_recipe 'yum-epel'
 end
 
-package ftp_service
+package node['pure-ftpd']['package']
 
 group node['pure-ftpd']['group']
 user node['pure-ftpd']['user'] do
-  gid   node['pure-ftpd']['group']
-  home  node['pure-ftpd']['home']
-  shell "/bin/false"
+  gid node['pure-ftpd']['group']
+  home node['pure-ftpd']['home']
+  shell '/bin/false'
 end
 
-case node['platform']
-when "debian", "ubuntu"
-  options = node['pure-ftpd']['options'].dup.reject { |k,_| %w(enabled disabled).include? k }.to_a
-  options += node['pure-ftpd']['options']['enabled'].map { |k| [k, "yes"] }
-  options += node['pure-ftpd']['options']['disabled'].map { |k| [k, "no"] }
-
+case node['platform_family']
+when 'rhel', 'fedora'
+  # rpm package uses single file configuration
+  template "#{node['pure-ftpd']['config_dir']}/pure-ftpd.conf" do
+    source 'pure-ftpd.conf.erb'
+    user 'root'
+    group 'root'
+    mode '0600'
+  end
+when 'debian'
+  # deb package(s) use(s) split configuration
   options.each do |name, value|
     file "#{node['pure-ftpd']['conf_config_dir']}/#{name}" do
       content value
       action :delete unless value
     end
   end
-  # Creates symlinks in auth/ to enable authentication type. Removes if it is disabled.
-  # Creates symlink only for the selected backend.
-  node['pure-ftpd']['auth'].keys.each do |auth|
-    # Creates parameter file with the right content.
-    file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}" do
-      content node['pure-ftpd']["#{auth}.conf"]
-      action :create
-      only_if { node['pure-ftpd']['auth'][auth]['enabled'] == "yes" and not ["pam", "unix"].include?(auth) }
-    end
-    file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}" do
-      action :delete
-      only_if { node['pure-ftpd']['auth'][auth]['enabled'] == "no" and not ["pam", "unix"].include?(auth) }
-    end
-    # Filename pattern: piority + auth_name -> (config) filename
-    link "#{node['pure-ftpd']['auth_config_dir']}/#{node['pure-ftpd']['auth'][auth]['priority']}#{node['pure-ftpd']['auth'][auth]['auth_name']}" do
-      to "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][auth]['filename']}"
-      action :delete if node['pure-ftpd']['auth'][auth]['enabled'] == "no"
-    end if auth == node['pure-ftpd']['backend']
-  end
 
-when "redhat", "centos", "scientific", "fedora", "amazon", "oracle"
-  # Creates configuration file.
-  template "#{node['pure-ftpd']['config_dir']}/pure-ftpd.conf" do
-    source "pure-ftpd.conf.erb"
-    user   "root"
-    group  "root"
-    mode   "0600"
+  config_content = standard_backend? ? 'yes' : node['pure-ftpd']["#{selected_backend}.conf"]
+  file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][selected_backend]['filename']}" do
+    content config_content
+    action :create
+  end
+  link_authentication_backend_configuration selected_backend, :create
+  disabled_backends.each do |disabled_backend|
+    link_authentication_backend_configuration disabled_backend, :delete
+    file "#{node['pure-ftpd']['conf_config_dir']}/#{node['pure-ftpd']['auth'][disabled_backend]['filename']}" do
+      action :delete
+    end
   end
 end
 
 # Configuration files for backends are platform independent.
-["mysql", "postgresql"].each do |backend|
+if database_backend?
   # Blanks disabled queries.
-  node['pure-ftpd'][backend]['disabled_queries'].each do |query|
-    node.default['pure-ftpd'][backend]['queries'][query] = nil
+  node['pure-ftpd'][selected_backend]['disabled_queries'].each do |query|
+    node.default['pure-ftpd'][selected_backend]['queries'][query] = nil
   end
   # Config file contains sensitive information, only root should have (read) access.
-  template node['pure-ftpd']["#{backend}.conf"] do
-    source "#{backend}.conf.erb"
-    user "root"
-    group "root"
-    mode "0600"
-  end if node['pure-ftpd']['backend'].eql? backend
+  template_name = "#{selected_backend}.conf.erb"
+  template node['pure-ftpd']["#{selected_backend}.conf"] do
+    source template_name
+    user 'root'
+    group 'root'
+    mode '0600'
+  end
 end
 
 # Creates virtual users' homes.
 directory node['pure-ftpd']['virtual_users_root'] do
-  owner  node['pure-ftpd']['user']
-  group  node['pure-ftpd']['group']
-  mode   "0775"
+  owner node['pure-ftpd']['user']
+  group node['pure-ftpd']['group']
+  mode '0775'
   action :create
 end if node['pure-ftpd']['virtual_users_root']
 
 # Enables and restarts Pure-FTPd service.
-service ftp_service do
-  supports :status => true, :restart => true
+service node['pure-ftpd']['package'] do
+  supports status: true, restart: true
   action [:enable, :start]
 end
