@@ -7,10 +7,10 @@ shared_context 'split configuration' do |backend|
   let(:enabled_options) { subject.node['pure-ftpd']['options']['enabled'] }
   let(:disabled_options) { subject.node['pure-ftpd']['options']['disabled'] }
   let(:deleted_files) do
-    subject.node['pure-ftpd']['options'].reject { |k, v| %w(enabled disabled).include?(k) || v }.keys
+    subject.node['pure-ftpd']['options'].dup.reject { |k, v| %w(enabled disabled).include?(k) || v }.keys
   end
   let(:config_files) do
-    subject.node['pure-ftpd']['options'].reject { |k, v| %w(enabled disabled).include?(k) || !v }.keys
+    subject.node['pure-ftpd']['options'].dup.reject { |k, v| %w(enabled disabled).include?(k) || !v }.keys
   end
   let(:backend_params) { subject.node['pure-ftpd']['auth'] }
 

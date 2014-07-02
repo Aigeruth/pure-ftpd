@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 2.1.2
+  - 2.0.0-p481
+bundler_args: --without kitchen_vagrant kitchen_common development --jobs 4
+script:
+  - bundle exec foodcritic .
+  - bundle exec rubocop
+  - bundle exec rspec

@@ -1,5 +1,7 @@
 # Pure-FTPd cookbook
 
+[![Build Status](https://travis-ci.org/Aigeruth/pure-ftpd.svg)](https://travis-ci.org/Aigeruth/pure-ftpd)
+
 ## Description
 
 Chef cookbook for installing and configuring Pure-FTPd server.

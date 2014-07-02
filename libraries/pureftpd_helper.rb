@@ -36,9 +36,12 @@ class Chef
       node['pure-ftpd']['options']['disabled'].map { |k| [k, 'no'] }
     end
 
+    def options_list
+      node['pure-ftpd']['options'].dup.reject { |k, _| %w(enabled disabled).include? k }.to_a
+    end
+
     def options
-      node['pure-ftpd']['options'].reject { |k, _| %w(enabled disabled).include? k }.to_a +
-      enabled_options + disabled_options
+      options_list + enabled_options + disabled_options
     end
 
     def link_authentication_backend_configuration(backend, link_action)
