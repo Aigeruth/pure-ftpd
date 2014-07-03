@@ -1,0 +1,47 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: debian-7.4
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: centos-6.5
+
+suites:
+  - name: backend-pam
+    run_list:
+      - recipe[pure-ftpd::default]
+    attributes:
+      pure-ftpd:
+        backend: 'pam'
+  - name: backend-unix
+    run_list:
+      - recipe[pure-ftpd::default]
+    attributes:
+      pure-ftpd:
+        backend: 'unix'
+  - name: backend-mysql
+    run_list:
+      - recipe[pure-ftpd::default]
+    attributes:
+      pure-ftpd:
+        backend: 'mysql'
+        mysql:
+          user: 'root'
+          password: 'rootpw'
+  - name: backend-postgresql
+    run_list:
+      - recipe[pure-ftpd::default]
+    attributes:
+      pure-ftpd:
+        backend: 'postgresql'
+        postgresql:
+          user: 'root'
+          password: 'rootpw'

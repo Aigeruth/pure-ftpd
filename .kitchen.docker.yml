@@ -1,18 +1,23 @@
 ---
-driver:
-  name: vagrant
-
-provisioner:
-  name: chef_solo
+driver: docker
+driver_config:
+  privileged: true
+  socket: <%= ENV['DOCKER_HOST'] %>
 
 platforms:
-  - name: debian-7.4
-    run_list:
-      - recipe[apt]
   - name: ubuntu-12.04
-    run_list:
-      - recipe[apt]
-  - name: centos-6.5
+    driver_config:
+      provision_command:
+        - apt-get install -y net-tools
+  - name: ubuntu-14.04
+    driver_config:
+      provision_command:
+        - apt-get install -y net-tools
+  - name: debian-7.4
+    driver_config:
+      provision_command:
+        - apt-get install -y net-tools
+  - name: centos-6
 
 suites:
   - name: backend-pam
@@ -33,9 +38,15 @@ suites:
     attributes:
       pure-ftpd:
         backend: 'mysql'
+        mysql:
+          user: 'root'
+          password: 'rootpw'
   - name: backend-postgresql
     run_list:
       - recipe[pure-ftpd::default]
     attributes:
       pure-ftpd:
         backend: 'postgresql'
+        postgresql:
+          user: 'root'
+          password: 'rootpw'

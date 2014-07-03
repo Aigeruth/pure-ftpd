@@ -163,6 +163,7 @@ pip-log.txt
 .DS_Store
 .kitchen/
 .kitchen.local.yml
+.kitchen.yml
 
 # locks
 /Gemfile.lock

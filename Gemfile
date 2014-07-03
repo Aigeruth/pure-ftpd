@@ -9,8 +9,9 @@ group :kitchen_common do
   gem 'test-kitchen'
 end
 
-group :kitchen_vagrant do
+group :kitchen_backends do
   gem 'kitchen-vagrant'
+  gem 'kitchen-docker'
 end
 
 group :lint do

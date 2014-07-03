@@ -163,6 +163,7 @@ $ bundle exec rspec
 Run integration tests with [KitchenCI](http://kitchen.ci/) and [Serverspec](http://serverspec.org/):
 
 ```bash
+ln -s .kitchen.vagrant.yml .kitchen.yml
 $ bundle exec kitchen test
 ```
 
