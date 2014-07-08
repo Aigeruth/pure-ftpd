@@ -1,0 +1,11 @@
+box: aigeruth/wercker-vagrant
+build:
+  steps:
+    - script:
+        name: bundle install
+        code: bundle install --jobs 4
+        cwd: $WORKING_DIR
+    - script:
+        name: kitchen test
+        code: bundle exec kitchen test
+        cwd: $WORKING_DIR
