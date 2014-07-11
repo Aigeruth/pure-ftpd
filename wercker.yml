@@ -1,0 +1,32 @@
+box: wercker-labs/docker
+build:
+  steps:
+    - script:
+        name: rvm install
+        code: |
+          sudo apt-get update -y
+          sudo apt-get install git zlib1g-dev libreadline-dev libqtwebkit-dev curl -y
+          sudo apt-get remove ruby1.9.1
+          curl -sSL https://get.rvm.io | bash -s stable
+          echo "bundler -v~>1.5.1" > $HOME/.rvm/gemsets/global.gems
+          source $HOME/.rvm/scripts/rvm
+          rvm install 2.1.2
+          rvm --default use 2.1.2
+          echo "gem: --no-rdoc --no-ri" >> $HOME/.gemrc
+    - rvm-use:
+        version: 2.1.2
+    - script:
+        name: pull base images
+        code: |
+          docker pull debian:7.4
+          docker pull ubuntu:12.04
+          docker pull ubuntu:14.04
+          docker pull centos:centos6
+    - bundle-install
+    - script:
+        name: kitchen test
+        code: |
+          echo $DOCKER_HOST
+          ln -s .kitchen.docker.yml .kitchen.yml
+          bundle exec kitchen test
+        cwd: $WORKING_DIR
