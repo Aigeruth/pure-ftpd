@@ -33,4 +33,5 @@ group :development do
   gem 'fauxhai'
   gem 'pry-nav'
   gem 'serverspec', '~> 2.0.0.beta6'
+  gem 'stove', '~> 3.2.2'
 end
