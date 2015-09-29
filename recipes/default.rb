@@ -69,7 +69,7 @@ when 'debian'
 end
 
 # Configuration files for backends are platform independent.
-if database_backend?
+if database_backend? && selected_backend != 'puredb'
   # Blanks disabled queries.
   node['pure-ftpd'][selected_backend]['disabled_queries'].each do |query|
     node.default['pure-ftpd'][selected_backend]['queries'][query] = nil
