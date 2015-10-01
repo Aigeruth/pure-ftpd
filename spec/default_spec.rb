@@ -4,7 +4,7 @@ require 'support/split_configuration_helper'
 
 shared_context 'configuration' do |platform, version, backend|
   let(:chef_run) do
-    runner = ChefSpec::Runner.new platform: platform, version: version
+    runner = ChefSpec::SoloRunner.new platform: platform, version: version
     runner.node.set['pure-ftpd']['backend'] = backend
     runner.converge recipe
   end
@@ -16,7 +16,7 @@ describe 'pure-ftpd::default' do
   let(:recipe) { described_recipe }
 
   context 'requires basic configuration' do
-    let(:chef_run) { ChefSpec::Runner.new.converge described_recipe }
+    let(:chef_run) { ChefSpec::SoloRunner.new.converge described_recipe }
     subject { -> { chef_run } }
 
     context 'without backend configuration' do
