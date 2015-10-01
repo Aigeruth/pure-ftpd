@@ -92,7 +92,7 @@ directory node['pure-ftpd']['virtual_users_root'] do
   action :create
 end if node['pure-ftpd']['virtual_users_root']
 
-if node['pure-ftpd']['options']['enabled'].include? "CallUploadScript"
+if node['pure-ftpd']['options']['enabled'].include? 'CallUploadScript'
   service 'pure-uploadscript' do
     supports start: true, stop: true
     action [:enable, :start]
