@@ -44,6 +44,7 @@ when 'rhel', 'fedora'
     user 'root'
     group 'root'
     mode '0600'
+    notifies :restart, "service[#{node['pure-ftpd']['package']}]", :delayed
   end
 when 'debian'
   # deb package(s) use(s) split configuration
