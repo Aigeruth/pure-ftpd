@@ -8,14 +8,14 @@ RSpec.configure do |config|
 end
 
 DEB_PLATFORMS = {
-  'ubuntu' => %w(12.04 14.04),
+  'ubuntu' => %w(12.04 14.04 16.04),
   'debian' => %w(6.0.5 7.5)
-}
+}.freeze
 RPM_PLATFORMS = {
   'centos' => %w(5.10 6.5),
   'redhat' => %w(5.10 6.5),
   'fedora' => %w(20)
-}
+}.freeze
 
 def service_name(platform, backend)
   'pure-ftpd' + (DEB_PLATFORMS.keys.include?(platform) && %w(mysql postgresql ldap).include?(backend) ? "-#{backend}" : '')

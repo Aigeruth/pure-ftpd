@@ -18,7 +18,7 @@
 #
 
 # Validates type of backend.
-fail "Backend should be one of [#{backends.join(', ')}]." unless backends.include? selected_backend
+raise "Backend should be one of [#{backends.join(', ')}]." unless backends.include? selected_backend
 
 case node['platform_family']
 when 'rhel', 'fedora'
