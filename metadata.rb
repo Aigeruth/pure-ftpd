@@ -7,6 +7,9 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.2.0'
 recipe 'pure-ftpd', 'Installs and configures Pure-FTPd server.'
 
+source_url 'https://github.com/Aigeruth/pure-ftpd' if respond_to?(:source_url)
+issues_url 'https://github.com/Aigeruth/pure-ftpd/issues' if respond_to?(:issues_url)
+
 %w(debian ubuntu).each do |os|
   supports os
 end
