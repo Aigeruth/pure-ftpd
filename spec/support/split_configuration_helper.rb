@@ -29,18 +29,18 @@ shared_context 'split configuration' do |backend|
   end
 
   it 'create config file for the selected backend' do
-    should create_file(File.join conf_config_dir, backend_params[backend]['filename'])
+    should create_file(File.join(conf_config_dir, backend_params[backend]['filename']))
   end
 
   it 'removes files for disabled backends' do
-    unused_backends.each { |unused_backend| should delete_file(File.join conf_config_dir, backend_params[unused_backend]['filename']) }
+    unused_backends.each { |unused_backend| should delete_file(File.join(conf_config_dir, backend_params[unused_backend]['filename'])) }
   end
 
   it 'links the backend' do
-    should create_link(File.join subject.node['pure-ftpd']['auth_config_dir'], "#{backend_params[backend]['priority']}#{backend_params[backend]['name']}")
+    should create_link(File.join(subject.node['pure-ftpd']['auth_config_dir'], "#{backend_params[backend]['priority']}#{backend_params[backend]['name']}"))
   end
 
   it 'removes links for unused backends' do
-    unused_backends.each { |b| should delete_link(File.join auth_config_dir, "#{backend_params[b]['priority']}#{backend_params[b]['name']}") }
+    unused_backends.each { |b| should delete_link(File.join(auth_config_dir, "#{backend_params[b]['priority']}#{backend_params[b]['name']}")) }
   end
 end
