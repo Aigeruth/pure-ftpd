@@ -4,7 +4,7 @@ maintainer_email 'mail@aigeruth.hu'
 license 'Apache 2.0'
 description 'Installs and configures Pure-FTPd server.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.2.1'
+version '0.2.2'
 recipe 'pure-ftpd', 'Installs and configures Pure-FTPd server.'
 
 source_url 'https://github.com/Aigeruth/pure-ftpd' if respond_to?(:source_url)
