@@ -83,7 +83,9 @@
 <%= "PureDB                 #{node['pure-ftpd']['puredb.conf']}" unless node['pure-ftpd']['auth']['puredb']['enabled'] == "no" %>
 
 # Path to pure-authd socket (see README.Authentication-Modules)
-# ExtAuth                       /var/run/ftpd.sock
+<% if node['pure-ftpd']['options']['ExtAuth'] %>
+ExtAuth <%= node['pure-ftpd']['options']['ExtAuth'] %>
+<% end %>
 
 # If you want to enable PAM authentication, uncomment the following line
 <%= "PAMAuthentication             yes" if node['pure-ftpd']['options']['enabled'].include? "PAMAuthentication" %>

@@ -109,6 +109,7 @@ default['pure-ftpd']['options']['TLS'] = nil # <0:no TLS | 1:TLS+cleartext | 2:e
 default['pure-ftpd']['options']['TLSCipherSuite'] = nil
 default['pure-ftpd']['options']['TrustedGID'] = nil
 default['pure-ftpd']['options']['TrustedIP'] = nil
+default['pure-ftpd']['options']['ExtAuth'] = nil
 
 # Default settings for LDAP backend.
 default['pure-ftpd']['ldap']['disabled_queries'] = []
