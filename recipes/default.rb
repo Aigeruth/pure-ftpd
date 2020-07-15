@@ -82,6 +82,9 @@ if database_backend? && selected_backend != 'puredb'
     user 'root'
     group 'root'
     mode '0600'
+    variables config: lazy {
+      node['pure-ftpd'][selected_backend]
+    }
   end
 end
 
